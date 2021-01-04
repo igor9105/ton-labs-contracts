@@ -105,6 +105,15 @@ contract DePool is ValidatorBase, ProxyBase, ConfigParamsBase, ParticipantBase, 
     /// @param participants Participants' reward fraction
     event RewardFractionsChanged(uint8 validator, uint8 participants);
 
+    /// @dev Event emitted when contract owner changes minstake
+    /// @param minStake Min stake which participant can send to Depool 
+    event MinStakeChanged(uint64 minStake);
+    
+    /// @dev Event emitted when ValidatorAssurance is changed
+    /// @param validatorAssurance min validator Stake
+    event ValidatorAssuranceChanged(validatorAssurance);
+    
+    
     modifier onlyOwner {
         require(msg.pubkey() == tvm.pubkey(), Errors.IS_NOT_OWNER);
         _;
@@ -1243,8 +1252,6 @@ contract DePool is ValidatorBase, ProxyBase, ConfigParamsBase, ParticipantBase, 
 
     /// @dev Sets new validator's reward fraction and calculates new participants' reward fraction
     function setValidatorRewardFraction(uint8 fraction) public onlyOwner {
-        require(fraction > 0, Errors.FRACTION_MUST_NOT_BE_ZERO);
-        
         tvm.accept();
 
         m_validatorRewardFraction = fraction;
@@ -1258,6 +1265,8 @@ contract DePool is ValidatorBase, ProxyBase, ConfigParamsBase, ParticipantBase, 
         require(minStake <= validatorAssurance, Errors.BAD_STAKES);
         
         m_minStake = minStake;
+        
+        emit MinStakeChanged(m_minStake);
     }
     
     /// @dev Sets new validatorAssurance
@@ -1265,6 +1274,8 @@ contract DePool is ValidatorBase, ProxyBase, ConfigParamsBase, ParticipantBase, 
         require(minStake <= validatorAssurance, Errors.BAD_STAKES);
         
         m_validatorAssurance = validatorAssurance;
+        
+        emit ValidatorAssuranceChanged(m_validatorAssurance);
     }
     // function that receives funds
     function receiveFunds() public pure {
