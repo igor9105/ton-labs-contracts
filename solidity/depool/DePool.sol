@@ -1245,8 +1245,6 @@ contract DePool is ValidatorBase, ProxyBase, ConfigParamsBase, ParticipantBase, 
     /// New validator's reward fraction must be less than current one
     /// fraction New validator's reward fraction
     function setValidatorRewardFraction(uint8 fraction) public onlyOwner {
-        require(fraction < m_validatorRewardFraction, Errors.NEW_VALIDATOR_FRACTION_MUST_BE_GREATER_THAN_OLD);
-        require(fraction > 0, Errors.FRACTION_MUST_NOT_BE_ZERO);
         tvm.accept();
 
         m_validatorRewardFraction = fraction;
