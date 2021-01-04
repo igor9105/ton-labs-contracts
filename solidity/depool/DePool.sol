@@ -1242,9 +1242,9 @@ contract DePool is ValidatorBase, ProxyBase, ConfigParamsBase, ParticipantBase, 
     }
 
     /// @dev Sets new validator's reward fraction and calculates new participants' reward fraction
-    /// New validator's reward fraction must be less than current one
-    /// fraction New validator's reward fraction
     function setValidatorRewardFraction(uint8 fraction) public onlyOwner {
+        require(fraction > 0, Errors.FRACTION_MUST_NOT_BE_ZERO);
+        
         tvm.accept();
 
         m_validatorRewardFraction = fraction;
@@ -1252,6 +1252,20 @@ contract DePool is ValidatorBase, ProxyBase, ConfigParamsBase, ParticipantBase, 
         emit RewardFractionsChanged(m_validatorRewardFraction, m_participantRewardFraction);
     }
 
+    /// @dev Sets new min stake 
+    function setMinStake(uint64 minStake) public onlyOwner {
+        require(minStake >= 1 ton, Errors.BAD_STAKES);
+        require(minStake <= validatorAssurance, Errors.BAD_STAKES);
+        
+        m_minStake = minStake;
+    }
+    
+    /// @dev Sets new validatorAssurance
+    function setValidatorAssurance(uint64 validatorAssurance) public onlyOwner {
+        require(minStake <= validatorAssurance, Errors.BAD_STAKES);
+        
+        m_validatorAssurance = validatorAssurance;
+    }
     // function that receives funds
     function receiveFunds() public pure {
     }
