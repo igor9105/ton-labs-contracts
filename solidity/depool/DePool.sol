@@ -1343,7 +1343,7 @@ contract DePool is ValidatorBase, ProxyBase, ConfigParamsBase, ParticipantBase, 
      */
 
     /// @dev returns participant's information about stakes in every round.
-    function <a name="targetname">getParticipantInfo</a>(address addr) public view
+    function <pre><a name="targetname">getParticipantInfo</a></pre>(address addr) public view
         returns (
             uint64 total,
             uint64 withdrawValue,
